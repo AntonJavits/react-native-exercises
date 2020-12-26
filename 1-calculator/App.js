@@ -22,7 +22,10 @@ export default function App() {
     setResultOfCalculation(parseInt(firstNumber) - parseInt(secondNumber))
   }
   return (
+
     <View style={styles.container}>
+
+      <StatusBar style={styles.StatusBar} barStyle={'dark-content'} />
 
       <View style={styles.titleSection}>
         <Text style={styles.titleHeading}>Calculator</Text>
@@ -59,17 +62,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  StatusBar: {
+    backgroundColor: '#f2f2f2'
+  },
   titleSection: {
-    flex: 1,
+    flex: 0.7,
     backgroundColor: '#f2f2f2',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 2
+    borderBottomColor: '#A8A8A8',
+    borderBottomWidth: 1
   },
   bodySection: {
-    flex: 5,
+    flex: 5.3,
     alignItems: 'flex-start',
     backgroundColor: '#fff',
     width: '100%',
@@ -77,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttonGroup: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#f2f2f2',
     width: 200,
     padding: 10,
     flexDirection: 'row', 
@@ -86,14 +92,18 @@ const styles = StyleSheet.create({
   },
   titleHeading: {
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
+    color: '#707070',
+    textTransform: 'uppercase',
+    marginTop: 10
   },
   calcultationResult: {
-    fontSize: 30
+    fontSize: 30,
+    marginBottom: 10
   },
   textInputBasic: {
     width: 200,
-    borderColor: 'gray',
+    borderColor: '#A8A8A8',
     borderWidth: 1,
     padding: 5,
     marginBottom: 10
