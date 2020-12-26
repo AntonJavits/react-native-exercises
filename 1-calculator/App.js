@@ -25,7 +25,7 @@ export default function App() {
 
     <View style={styles.container}>
 
-      <StatusBar style={styles.StatusBar} barStyle={'dark-content'} />
+      <StatusBar style={styles.statusBar} barStyle={'dark-content'} />
 
       <View style={styles.titleSection}>
         <Text style={styles.titleHeading}>Calculator</Text>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  StatusBar: {
+  statusBar: {
     backgroundColor: '#f2f2f2'
   },
   titleSection: {

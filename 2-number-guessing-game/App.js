@@ -6,37 +6,38 @@ export default function App() {
 
   const defaultOutput = 'Guess a number between 1-100'
   const newRandomNumber = Math.floor(Math .random() * 100) + 1
-  const [guessedNumber, setGuessedNumber] = useState(0)
+  const [guessedNumber, setGuessedNumber] = useState('')
   const [guessCount, setGuessCount] = useState(0)
   const [outputText, setOutputText] = useState(defaultOutput)
-  const [randomNumber, setRandomNumer] = useState(newRandomNumber)
+  const [randomNumber, setRandomNumber] = useState(newRandomNumber)
 
-  console.warn(`Random number is ${randomNumber}, count: ${guessCount}`)
+  // console.warn(`Random number is ${randomNumber}, count: ${guessCount}`)
 
-  const handleInputChangeNumber = (guessedNumber) => {
-    setGuessedNumber(parseInt(guessedNumber.replace(/[^0-9]/g, '')) )
+  const handleInputChangeNumber = (event) => {
+    setGuessedNumber(event.target.value)
   }
 
   const guessMade = () => {
-    if (guessedNumber > randomNumber) {
+
+    let updatedCount = guessCount + 1
+    setGuessCount(updatedCount)
+
+    let numberToEvaluate = parseInt(guessedNumber)
+
+    if (numberToEvaluate > randomNumber) {
       setOutputText(`Your guess ${guessedNumber} is too high`)
-      let updatedCount = guessCount + 1
-      setGuessCount(updatedCount)
     }
-    if (guessedNumber < randomNumber) {
+    if (numberToEvaluate < randomNumber) {
       setOutputText(`Your guess ${guessedNumber} is too low`)
-      let updatedCount = guessCount + 1
-      setGuessCount(updatedCount)
     }
-    if (guessedNumber == randomNumber) {
-      Alert.alert(`You guessed the number in ${guessCount} guesses`)
+    if (numberToEvaluate == randomNumber) {
+      Alert.alert(`You guessed the number in ${updatedCount} guesses`)
       setGuessCount(0)
       setGuessedNumber('')
-      setRandomNumer(newRandomNumber)
+      setRandomNumber(newRandomNumber)
       setOutputText(defaultOutput)
     } 
   }
-
 
   return (
 
@@ -53,7 +54,7 @@ export default function App() {
         <Text style={styles.outputText}>{outputText}</Text>
         <TextInput
           style={styles.textInputBasic}
-          onChangeText={guessedNumber => handleInputChangeNumber(guessedNumber)}
+          onChangeText={guessedNumber => setGuessedNumber(guessedNumber)}
           keyboardType='numeric'
           value={guessedNumber}
         />
