@@ -5,10 +5,9 @@ import { StyleSheet, FlatList, Text, View, Button, TextInput, Alert } from 'reac
 export default function App() {
 
   const [resultOfCalculation, setResultOfCalculation] = useState(0)
-  const [firstNumber, setFirstNumber] = useState('Input first value: ')
-  const [secondNumber, setSecondNumber] = useState('Input first value: ')
-  // const [operand, setOperand] = useState('')
-  const [history, setHistory] = useState(['2 + 2 = 4', '1 - 3 = -2'])
+  const [firstNumber, setFirstNumber] = useState('Set first number: ')
+  const [secondNumber, setSecondNumber] = useState('Set second number: ')
+  const [history, setHistory] = useState([])
 
   const handleInputChangeFirstNum = (firstNumber) => {
     setFirstNumber(firstNumber.replace(/[^0-9]/g, ''))
@@ -18,16 +17,24 @@ export default function App() {
   }
 
   const addPressed = () => {
-    let result = parseInt(firstNumber) + parseInt(secondNumber)
-    let historyText = `${firstNumber} + ${secondNumber} = ${result}`
-    setResultOfCalculation(result)
-    setHistory([...history, historyText]) 
+    if ( isNaN(firstNumber) || isNaN(secondNumber) )  { Alert.alert('Set proper numbers') } else {
+      let result = parseInt(firstNumber) + parseInt(secondNumber)
+      let historyText = `${firstNumber} + ${secondNumber} = ${result}`
+      setResultOfCalculation(result)
+      setHistory([...history, {key: historyText}])
+      setFirstNumber('Set first number: ')
+      setSecondNumber('Set second number: ')
+    } 
   }
   const substractPressed = () => {
-    let result = parseInt(firstNumber) - parseInt(secondNumber)
-    let historyText = `${firstNumber} - ${secondNumber} = ${result}`
-    setResultOfCalculation(result)
-    setHistory([...history, historyText])
+    if ( isNaN(firstNumber) || isNaN(secondNumber) )  { Alert.alert('Set proper numbers') } else {
+      let result = parseInt(firstNumber) - parseInt(secondNumber)
+      let historyText = `${firstNumber} - ${secondNumber} = ${result}`
+      setResultOfCalculation(result)
+      setHistory([...history, {key: historyText}])
+      setFirstNumber('Set first number: ')
+      setSecondNumber('Set second number: ')
+    }
   } 
 
   const addToHistory = (operand) => {
@@ -66,7 +73,7 @@ export default function App() {
         <FlatList
             data={history}
             renderItem={({item}) =>
-              <Text>{item}</Text>}
+              <Text>{item.key}</Text>}
           />
         </View>
         
