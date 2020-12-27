@@ -12,7 +12,7 @@ export default function App() {
   }
 
   const addItem = () => {
-    setShoppingList([...shoppingList, {key: itemInput}])
+    (itemInput !== '') && setShoppingList([...shoppingList, {key: itemInput}])
     setItemInput('')
   }
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row', 
     justifyContent: 'space-around',
-    marginBottom: 60
+    marginBottom: 20
   },
   titleHeading: {
     fontWeight: 'bold',
@@ -98,10 +98,6 @@ const styles = StyleSheet.create({
     color: '#707070',
     textTransform: 'uppercase',
     marginTop: 10
-  },
-  calcultationResult: {
-    fontSize: 30,
-    marginBottom: 10
   },
   textInputBasic: {
     width: 200,
