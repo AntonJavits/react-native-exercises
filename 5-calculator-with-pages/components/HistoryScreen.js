@@ -1,12 +1,18 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 
-const HistoryScreen = () => {
+const HistoryScreen = ({ route }) => {
+  const { history } = route.params;
   return (
     <View style={styles.screen}>
       <StatusBar style='auto' />
-      <Text>History</Text>
+      <Text style={styles.historyHeading}>History</Text>
+      <FlatList
+            data={history}
+            renderItem={({item}) =>
+              <Text>{item.key}</Text>}
+      />
     </View>
   );
 };
