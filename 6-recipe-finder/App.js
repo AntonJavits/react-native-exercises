@@ -1,7 +1,7 @@
 
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, FlatList, Image } from 'react-native';
 
 export default function App() {
 
@@ -17,7 +17,10 @@ export default function App() {
 
   const FlatListItem = ({item}) => (
     <View style={styles.flatListItem}>
-      <Text>img</Text>
+      <Image
+        style={styles.flatListImg}
+        source={{ uri: item.thumbnail ? item.thumbnail : 'https://via.placeholder.com/300/09f/fff.png' }}
+      />
       <Text style={styles.flatListItemText}>{item.title}</Text>
     </View>
   );
@@ -35,7 +38,7 @@ export default function App() {
       <StatusBar style={styles.statusBar} barStyle={'dark-content'} />
 
       <View style={styles.titleSection}>
-        <Text style={styles.titleHeading}>Networking</Text>
+        <Text style={styles.titleHeading}>Recipe finder</Text>
       </View>
 
       <View style={styles.resultsSection}>
@@ -116,16 +119,29 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   flatListItem: {
-    backgroundColor: '#E4E6E7',
-    padding: 5,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#eeeff0',
+    paddingRight: 5,
     marginRight: 15,
-    marginLeft: 15
+    marginLeft: 15,
+  },
+  flatListImg: {
+    width: 70,
+    height: 70,
+    marginRight: 5
   },
   flatListItemText: {
-    fontSize: 15
+    flexShrink: 1,
+    marginTop: 3,
+    marginRight: 7,
+    marginBottom: 3,
+    marginLeft: 4,
+    fontSize: 18,
+    color: '#374248'
   },
   separator: {
-    height: 5,
+    height: 10,
     width: "100%",
     backgroundColor: '#FFFFFF'
   }
