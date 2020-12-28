@@ -1,16 +1,32 @@
+
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
 
 export default function App() {
 
-  const[resultOfSearch, setResultOfSearc] = useState('');
+  const[resultOfSearch, setResultOfSearch] = useState([]);
   const[keyword, setKeyword] = useState('');
-  const[location, setLocation] = useState(''); 
 
-  const searchPressed = () => {
-    // Fetch
+  const searchPressed = async () => {
+    let url = `http://www.recipepuppy.com/api/?i=${keyword}`;
+    let response = await fetch(url);
+    let data = await response.json();
+    setResultOfSearch(data.results);
   }
+
+  const FlatListItem = ({item}) => (
+    <View style={styles.flatListItem}>
+      <Text>img</Text>
+      <Text style={styles.flatListItemText}>{item.title}</Text>
+    </View>
+  );
+
+  const ListSeparator = () => {
+    return (
+      <View style={styles.separator} />
+    );
+  };
 
   return (
 
@@ -19,11 +35,16 @@ export default function App() {
       <StatusBar style={styles.statusBar} barStyle={'dark-content'} />
 
       <View style={styles.titleSection}>
-        <Text style={styles.titleHeading}>Calculator</Text>
+        <Text style={styles.titleHeading}>Networking</Text>
       </View>
 
       <View style={styles.resultsSection}>
-        <Text style={styles.resultText}>results</Text>
+        <FlatList 
+          keyExtractor={(item) => item.title} 
+          renderItem={FlatListItem} 
+          ItemSeparatorComponent={ListSeparator} 
+          data={resultOfSearch} 
+        />  
       </View>
       
       <View style={styles.inputsSection}>
@@ -32,11 +53,6 @@ export default function App() {
           style={styles.textInputBasic}
           onChangeText={keyword => setKeyword(keyword)}
           value={keyword}/>
-        <TextInput
-        placeholder={'Location: '}
-          style={styles.textInputBasic}
-          onChangeText={location => setLocation(location)}
-          value={location}/>
         <View style={styles.buttonGroup}>
           <Button onPress={searchPressed} title="Search"/>
         </View>
@@ -74,23 +90,19 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   resultsSection: {
-    flex: 5.1,
+    flex: 6,
     justifyContent: 'flex-start',
     backgroundColor: '#FFFFFF',
     width: '100%',
     borderBottomColor: '#A8A8A8',
-    marginTop: 40,
+    marginTop: 10,
     borderBottomWidth: 1
   },
-  resultText: {
-    alignSelf: 'center',
-    fontSize: 15,
-    color: '#666666'
-  },
   inputsSection: {
-    flex: 2.5,
+    flex: 1.4,
+    flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
@@ -101,7 +113,21 @@ const styles = StyleSheet.create({
     fontSize: 15,
     borderWidth: 1,
     padding: 5,
-    marginBottom: 10
+    marginRight: 5
+  },
+  flatListItem: {
+    backgroundColor: '#E4E6E7',
+    padding: 5,
+    marginRight: 15,
+    marginLeft: 15
+  },
+  flatListItemText: {
+    fontSize: 15
+  },
+  separator: {
+    height: 5,
+    width: "100%",
+    backgroundColor: '#FFFFFF'
   }
 });
 
