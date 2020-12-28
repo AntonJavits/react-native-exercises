@@ -11,7 +11,7 @@ const HistoryScreen = ({ route }) => {
       <FlatList
             data={history}
             renderItem={({item}) =>
-              <Text>{item.key}</Text>}
+              <Text style={styles.historyText}>{item.key}</Text>}
       />
     </View>
   );
@@ -23,6 +23,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  screen: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusBar: {
+    backgroundColor: '#f2f2f2'
+  },
+  historyHeading: {
+    marginTop: 50,
+    marginBottom: 10,
+    fontSize: 30,
+    textAlign: 'center'
+  },
+  historyText: {
+    marginBottom: 5,
+    fontSize: 20,
+    textAlign: 'center'
+  }
 });
 
 export default HistoryScreen;

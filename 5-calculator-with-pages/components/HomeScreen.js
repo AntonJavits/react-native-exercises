@@ -42,10 +42,6 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.screen}>
       <StatusBar style='auto' />
-
-      <View style={styles.titleSection}>
-        <Text style={styles.titleHeading}>Calculator with history</Text>
-      </View>
       
       <Text style={styles.calcultationResult}>Result: {resultOfCalculation}</Text>
       <TextInput
@@ -81,7 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2'
   },
   bodySection: {
-    flex: 5.3,
     alignItems: 'flex-start',
     backgroundColor: '#fff',
     width: '100%',
