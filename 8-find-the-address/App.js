@@ -1,23 +1,42 @@
 import React, {useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 
 export default function App() {
 
   const [address, setAddress] = useState('');
+  const [location, setLocation] = useState({'lat':0,'lng':0});
+  const [userAddress, setUserAddress] = useState('Helsinki')
+  const mapquestKey = 'moHod1yGLgoaOGVdkL0ePy0XitjfVxVt';
+  const mapquestUrl = `http://www.mapquestapi.com/geocoding/v1/address?key=${mapquestKey}`;
+  
+  const getLocation = async () => {
+    let url = `${mapquestUrl}&location=${userAddress}`;
+    let response = await fetch(url);
+    let data = await response.json();
+    setLocation(data.results[0].locations[0].latLng); 
+  }
 
   return (
     <View style={styles.container}>
       <MapView style={styles.map}
+        
         initialRegion={{
-        latitude: 60.200692,
-        longitude: 24.934302,
-        latitudeDelta: 0.0322,
-        longitudeDelta: 0.0221
-      }} >
+          latitude: 60.200692,
+          longitude: 24.934302,
+          latitudeDelta: 0.0322,
+          longitudeDelta: 0.0221
+        }}
+        region={{   
+          latitude: location.lat,
+          longitude: location.lng,
+          latitudeDelta: 0.0322,
+          longitudeDelta: 0.0221
+        }}
+        >
         <Marker coordinate={{
-          latitude:60.201373,
-          longitude: 24.934041}}
+          latitude: location.lat,
+          longitude: location.lng}}
           title='Haaga-Helia'
         />
       </MapView>
@@ -26,13 +45,13 @@ export default function App() {
           <TextInput
             style={styles.textInputBasic}
             placeholder={'Enter address'}
-            onChange={address => setAddress(address)}
-            value={address}
+            onChangeText={userAddress => setUserAddress(userAddress)}
+            value={userAddress}
           />
           <View style={styles.searchBtnView}>
             <Button
               style={styles.searchBtn}
-              onPress={true}
+              onPress={getLocation}
               title={'Show'}
             />
           </View>
