@@ -14,19 +14,16 @@ export default function App() {
     let url = `${mapquestUrl}&location=${userAddress}`;
     let response = await fetch(url);
     let data = await response.json();
-    setLocation(data.results[0].locations[0].latLng); 
+    setLocation({   
+      ...location,
+      lat: data.results[0].locations[0].latLng.lat,
+      lng: data.results[0].locations[0].latLng.lng,
+    })
   }
 
   return (
     <View style={styles.container}>
       <MapView style={styles.map}
-        
-        initialRegion={{
-          latitude: 60.200692,
-          longitude: 24.934302,
-          latitudeDelta: 0.0322,
-          longitudeDelta: 0.0221
-        }}
         region={{   
           latitude: location.lat,
           longitude: location.lng,
@@ -37,7 +34,7 @@ export default function App() {
         <Marker coordinate={{
           latitude: location.lat,
           longitude: location.lng}}
-          title='Haaga-Helia'
+          title={userAddress}
         />
       </MapView>
 
