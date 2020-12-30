@@ -1,7 +1,7 @@
 
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Image } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 export default function App() {
@@ -24,7 +24,7 @@ export default function App() {
   }, []);
 
   const convertCurrency = () => {
-    setCalculated(parseFloat(ammount !== '' ? ammount : 0) * exchangeRates[selectedCurrency]);
+    setCalculated(parseFloat( (ammount !== '' ? ammount : 0) * exchangeRates[selectedCurrency]).toFixed(2));
   }
 
   return (
@@ -38,7 +38,10 @@ export default function App() {
       </View>
 
       <View style={styles.heroImgSection}>
-        <Text>img...</Text>
+        <Image
+          style={styles.heroImg}
+          source={require('./img/euro-coin.jpg')}
+        />
       </View>
 
       <View style={styles.resultsSection}>
@@ -49,22 +52,20 @@ export default function App() {
         <TextInput
           style={styles.textInputBasic}
           placeholder={'0'}
-          onChangeText={ammount => setAmmount(ammount)}
+          onChangeText={ammount => setAmmount(ammount.replace(/,/g, '.'))}
           value={ammount}
           keyboardType={'numeric'}
         />
-        <View style={styles.picker}>
-          <Picker
-            style={{height: 50, width: 100}}
-            selectedValue={selectedCurrency}
-            onValueChange={(itemValue) => {
-              setSelectedCurrency(itemValue);
-            }}>
-            {currencies.map((currency, index) => ( // key = currency?
-              <Picker.Item key={index} label={currency} value={currency} />
-            ))}
-          </Picker>
-        </View>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedCurrency}
+          onValueChange={(itemValue) => {
+            setSelectedCurrency(itemValue);
+          }}>
+          {currencies.map((currency, index) => ( // key = currency?
+            <Picker.Item key={index} label={currency} value={currency} />
+          ))}
+        </Picker>
 
       </View>
 
@@ -103,7 +104,13 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   heroImgSection: {
-    flex: 4
+    flex: 4,
+    justifyContent: 'center',
+    alignContent: 'center'
+  },
+  heroImg: {
+    height: 300,
+    width: 300
   },
   resultsSection: {
     flex: 1
@@ -116,7 +123,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
@@ -130,12 +136,8 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   picker: {
-    width: 100,
-    borderColor: '#A8A8A8',
-    fontSize: 15,
-    borderWidth: 1,
-    padding: 5,
-    marginRight: 5
+    height: 50,
+    width: 100
   },
   buttonSection: {
     flex: 1
