@@ -1,25 +1,46 @@
-import { StatusBar } from 'expo-status-bar'
-import React, { useState } from 'react'
-import { StyleSheet, FlatList, Text, View, Button, TextInput, Alert } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, FlatList, Text, View, Button, TextInput, Alert } from 'react-native';
 
 export default function App() {
 
-  const [itemInput, setItemInput] = useState('')
-  const [shoppingList, setShoppingList] = useState([])
+  const [itemInput, setInputItem] = useState('');
+  const [ammountInput, setInputAmmount] = useState('');
+  const [shoppingList, setShoppingList] = useState([]);
 
-  const handleInputChange = (itemInput) => {
-    setItemInput(itemInput)
+  const handleItemChange = (itemInput) => {
+    setInputItem(itemInput);
+  }
+  const handleAmmountChange = (ammountInput) => {
+    setInputAmmount(ammountInput);
   }
 
   const addItem = () => {
-    (itemInput !== '') && setShoppingList([...shoppingList, {key: itemInput}])
-    setItemInput('')
+    (itemInput !== '') && setShoppingList([...shoppingList, {
+      'key': itemInput,
+      'title': itemInput,  
+      'ammount': ammountInput
+      }]);
+    setInputItem('');
+    setInputAmmount('');
   }
 
   const clearItems = () => {
-    setShoppingList([])
-  } 
+    setShoppingList([]);
+  }
 
+  const listSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 5,
+          width: "80%",
+          backgroundColor: "#fff",
+          marginLeft: "10%"
+        }}
+      />
+    );
+  };
   return (
 
     <View style={styles.container}>
@@ -34,8 +55,12 @@ export default function App() {
         
         <TextInput
           style={styles.textInputBasic}
-          onChangeText={itemInput => handleInputChange(itemInput)}
+          onChangeText={itemInput => handleItemChange(itemInput)}
           value={itemInput}/>
+        <TextInput
+          style={styles.textInputBasic}
+          onChangeText={ammountInput => handleAmmountChange(ammountInput)}
+          value={ammountInput}/>
 
         <View style={styles.buttonGroup}>
           <Button onPress={addItem} title="Add item"/>
@@ -45,12 +70,15 @@ export default function App() {
           <Text style={styles.listHeading}>Shopping List</Text>
           <FlatList
               contentContainerStyle={styles.listRows}
-              data={shoppingList}
-              renderItem={({item}) =>
+              
+              keyExtractor={item => item.key}
+              renderItem={({item}) => 
                 <View style={styles.listItemRow}>
-                  <Text style={styles.listItem}>{item.key}</Text>
+                  <Text style={styles.listItem}>{item.title}, {item.ammount}</Text>
                   <Text style={styles.itemAction}>Bought</Text>
                 </View>}
+            data={shoppingList}
+            ItemSeparatorComponent={listSeparator}
             />
         </View>
         
