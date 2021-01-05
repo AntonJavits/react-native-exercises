@@ -1,12 +1,48 @@
 import { StatusBar } from 'expo-status-bar';
+import * as SQLite from 'expo-sqlite';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, Text, View, Button, TextInput, Alert } from 'react-native';
+
+const db = SQLite.openDatabase('shoppinglist-db.db');
 
 export default function App() {
 
   const [itemInput, setInputItem] = useState('');
   const [ammountInput, setInputAmmount] = useState('');
   const [shoppingList, setShoppingList] = useState([]);
+
+  
+
+  useEffect(() => {
+    db.transaction(tx => {
+      tx.executeSql('create table if not exists shoppingList (id integer primary key not null, ammount text, item text);');
+    });
+    updateList();
+  }, []);
+
+  const saveItem = () => {
+    db.transaction(tx => {
+      tx.executeSql('insert into shoppingList (ammount, item) values (?, ?);', [ammountInput, itemInput]);
+    }, null, updateList
+    )
+  }
+
+  const updateList = () => {
+    db.transaction(tx => {
+      tx.executeSql('select * from shoppingList;', [], (_, { rows }) =>
+        setShoppingList(rows._array)
+      );
+    });
+  }
+
+  const deleteItem = (id) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(`delete from shoppingList where id = ?;`, [id]);
+      }, null, updateList
+    )
+  }
+
 
   const handleItemChange = (itemInput) => {
     setInputItem(itemInput);
@@ -19,7 +55,7 @@ export default function App() {
     (itemInput !== '') && setShoppingList([...shoppingList, {
       'key': itemInput,
       'title': itemInput,  
-      'ammount': ammountInput
+      'ammount': parseInt(ammountInput)
       }]);
     setInputItem('');
     setInputAmmount('');
@@ -63,19 +99,21 @@ export default function App() {
           value={ammountInput}/>
 
         <View style={styles.buttonGroup}>
-          <Button onPress={addItem} title="Add item"/>
+          <Button onPress={saveItem} title="Add item"/>
           <Button onPress={clearItems} title="Clear"/>
         </View>
         <View>
           <Text style={styles.listHeading}>Shopping List</Text>
           <FlatList
               contentContainerStyle={styles.listRows}
-              
-              keyExtractor={item => item.key}
+              keyExtractor={item => item.id.toString()}
               renderItem={({item}) => 
                 <View style={styles.listItemRow}>
                   <Text style={styles.listItem}>{item.title}, {item.ammount}</Text>
-                  <Text style={styles.itemAction}>Bought</Text>
+                  <Text style={styles.itemAction}
+                    onPress={() => deleteItem(item.id)}
+                    >Bought
+                  </Text>
                 </View>}
             data={shoppingList}
             ItemSeparatorComponent={listSeparator}
