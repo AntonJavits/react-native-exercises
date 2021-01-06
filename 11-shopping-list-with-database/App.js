@@ -21,10 +21,12 @@ export default function App() {
   }, []);
 
   const saveItem = () => {
-    db.transaction(tx => {
+    (itemInput !== '') && db.transaction(tx => {
       tx.executeSql('insert into shoppingList (ammount, item) values (?, ?);', [ammountInput, itemInput]);
     }, null, updateList
     )
+    setInputItem('');
+    setInputAmmount('');
   }
 
   const updateList = () => {
@@ -43,7 +45,6 @@ export default function App() {
     )
   }
 
-
   const handleItemChange = (itemInput) => {
     setInputItem(itemInput);
   }
@@ -51,18 +52,12 @@ export default function App() {
     setInputAmmount(ammountInput);
   }
 
-  const addItem = () => {
-    (itemInput !== '') && setShoppingList([...shoppingList, {
-      'key': itemInput,
-      'title': itemInput,  
-      'ammount': parseInt(ammountInput)
-      }]);
-    setInputItem('');
-    setInputAmmount('');
-  }
-
   const clearItems = () => {
-    setShoppingList([]);
+    db.transaction(
+      tx => {
+        tx.executeSql(`delete from shoppingList;`);
+      }, null, updateList
+    )
   }
 
   const listSeparator = () => {
@@ -109,7 +104,7 @@ export default function App() {
               keyExtractor={item => item.id.toString()}
               renderItem={({item}) => 
                 <View style={styles.listItemRow}>
-                  <Text style={styles.listItem}>{item.title}, {item.ammount}</Text>
+                  <Text style={styles.listItem}>{item.item}, {item.ammount}</Text>
                   <Text style={styles.itemAction}
                     onPress={() => deleteItem(item.id)}
                     >Bought
