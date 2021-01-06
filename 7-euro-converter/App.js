@@ -30,13 +30,11 @@ export default function App() {
   return (
 
     <View style={styles.container}>
-
       <StatusBar style={styles.statusBar} barStyle={'dark-content'} />
-
+     
       <View style={styles.titleSection}>
         <Text style={styles.titleHeading}>Euro converter</Text>
       </View>
-
       <View style={styles.heroImgSection}>
         <Image
           style={styles.heroImg}
@@ -62,17 +60,16 @@ export default function App() {
           onValueChange={(itemValue) => {
             setSelectedCurrency(itemValue);
           }}>
-          {currencies.map((currency, index) => ( // key = currency?
+          {currencies.map((currency, index) => (
             <Picker.Item key={index} label={currency} value={currency} />
           ))}
         </Picker>
-
       </View>
 
       <View style={styles.buttonSection}>
           <Button onPress={convertCurrency} title="Convert"/>
       </View>
-    
+      
     </View>
   );
 }
