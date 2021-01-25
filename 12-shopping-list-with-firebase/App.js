@@ -76,11 +76,7 @@ export default function App() {
   }
 */
   const deleteItem = (id) => {
-    db.transaction(
-      tx => {
-        tx.executeSql(`delete from shoppingList where id = ?;`, [id]);
-      }, null, updateList
-    )
+    firebase.database().ref('/items' + key) = null;
   } 
 
   const handleItemChange = (itemInput) => {
@@ -132,7 +128,7 @@ export default function App() {
               <View style={styles.listItemRow}>
                 <Text style={styles.listItem}>{item.item}, {item.ammount}</Text>
                 <Text style={styles.itemAction}
-                  /* onPress={() => deleteItem(item.id)} */
+                  onPress={() => deleteItem(item.id)}
                   >Bought
                 </Text>
               </View>}
