@@ -67,16 +67,11 @@ export default function App() {
     setInputAmmount('');
   }
 
-/*   const updateList = () => {
-    db.transaction(tx => {
-      tx.executeSql('select * from shoppingList;', [], (_, { rows }) =>
-        setShoppingList(rows._array)
-      );
-    });
-  }
-*/
   const deleteItem = (id) => {
-    firebase.database().ref('/items' + key) = null;
+  var deleteRef = `/items/${id}`;
+   console.log(deleteRef);
+   firebase.database().ref(deleteRef).remove();
+  
   } 
 
   const handleItemChange = (itemInput) => {
