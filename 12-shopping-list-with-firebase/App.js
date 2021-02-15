@@ -3,9 +3,6 @@ import * as firebase from 'firebase';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, Text, View, Button, TextInput, Alert } from 'react-native';
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
 const firebaseConfig = {
   apiKey: "",
   authDomain: "expo3-918c2.firebaseapp.com",
@@ -13,15 +10,13 @@ const firebaseConfig = {
   projectId: "expo3-918c2",
   storageBucket: "expo3-918c2.appspot.com",
   messagingSenderId: "873112336297",
-  appId: "1:873112336297:web:53303a10bac2cbe54cb6b8"
+  appId: "1:873112336297:web:c230f0d96f1fc5a74cb6b8"
 };
 
 // Initialize Firebase
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
 
 const listSeparator = () => {
   return (
@@ -46,6 +41,7 @@ export default function App() {
     console.log('effect');
     firebase.database().ref('items/').on('value', (snapshot) => {
       const data = snapshot.val();
+      console.log("data:", data)
       let allRows = [];
       if (data) {
         for (let i in data) {
@@ -56,7 +52,7 @@ export default function App() {
     });
   }, []);
 
-  shoppingList.length > 0 && console.log(shoppingList);
+  shoppingList.length > 0 && console.log("shopping list state: ", shoppingList);
 
 
   const saveItem = () => {
@@ -69,10 +65,29 @@ export default function App() {
 
   const deleteItem = (id) => {
   var deleteRef = `/items/${id}`;
-   console.log(deleteRef);
    firebase.database().ref(deleteRef).remove();
+  }
+  const deleteAllItems = () => {
+    var deleteRef = `/items/`;
+     console.log(deleteRef);
+     firebase.database().ref(deleteRef).remove();
+  }
   
-  } 
+  const clearCollection = () => {
+    firebase.database().ref('items/').on('value', (snapshot) => {
+      let allData = snapshot.val();
+      for (let i in allData) {
+        console.log("i: ", i);
+        
+        firebase.database().ref(`/items/${i}`).remove();
+      }
+      
+      //snapshot.forEach((item) => {
+      //  ref.doc(doc.id).delete()
+      //console.log('item:', item)
+      //})
+    })
+  }
 
   const handleItemChange = (itemInput) => {
     setInputItem(itemInput);
@@ -81,13 +96,6 @@ export default function App() {
     setInputAmmount(ammountInput);
   }
 
-/*   const clearItems = () => {
-    db.transaction(
-      tx => {
-        tx.executeSql(`delete from shoppingList;`);
-      }, null, updateList
-    )
-  } */
   return (
 
     <View style={styles.container}>
@@ -111,7 +119,7 @@ export default function App() {
 
         <View style={styles.buttonGroup}>
         <Button onPress={saveItem} title="Add item"/> 
-          <Button onPress={console.log('clearItems')} title="Clear"/>
+          <Button onPress={() => clearCollection()} title="Clear"/>
         </View>
         <View>
           <Text style={styles.listHeading}>Shopping List</Text>
