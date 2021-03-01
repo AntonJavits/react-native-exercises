@@ -5,13 +5,13 @@ import * as SMS from 'expo-sms'
 import { StyleSheet, FlatList, Text, View, Button, TextInput } from 'react-native'
 
 
-const Item = ({ name }) => (
+const Item = ({ name, number }) => (
   <View>
-    <Text>{name}</Text>
+    <Text>{name}, {number}</Text>
   </View>
 );
 
-const renderItem = ({ item }) => <Item name={item.name} />;
+const renderItem = ({ item }) => <Item name={item.name} number={item.phoneNumbers[0].number} />;
 
 export default function App() {
   const [myContacts, setMyContacts] = useState({});
